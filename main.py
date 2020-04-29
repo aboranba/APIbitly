@@ -4,7 +4,6 @@ import os
 import sys
 import argparse
 from dotenv import load_dotenv
-load_dotenv()
 
 TOKEN = os.getenv("BITLY_TOKEN")
 
@@ -46,15 +45,16 @@ def count_clicks(TOKEN, bitlink):
   return clicks_count
 
 if __name__ == '__main__':
-    url = args.url
+  load_dotenv()
+  url = args.url
 
-    if url.startswith("bit.ly"):
-      try:
-        print('Number of shortened url clicks: '+str(count_clicks(TOKEN, url)))
-      except requests.exceptions.HTTPError:
-        print('Wrong bitlink')
-    else:
-      try:
-        print(shorten_link(TOKEN, url))
-      except requests.exceptions.HTTPError:
-        print('Wrong url')
+  if url.startswith("bit.ly"):
+    try:
+      print('Number of shortened url clicks: '+str(count_clicks(TOKEN, url)))
+    except requests.exceptions.HTTPError:
+      print('Wrong bitlink')
+  else:
+    try:
+      print(shorten_link(TOKEN, url))
+    except requests.exceptions.HTTPError:
+      print('Wrong url')
