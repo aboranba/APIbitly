@@ -7,10 +7,6 @@ from dotenv import load_dotenv
 
 TOKEN = os.getenv("BITLY_TOKEN")
 
-parser = argparse.ArgumentParser()
-parser.add_argument("url")
-args = parser.parse_args()
-
 def shorten_link(TOKEN, url):
   if not url.startswith("https://"):
     if not url.startswith("http://"):
@@ -46,6 +42,9 @@ def count_clicks(TOKEN, bitlink):
 
 if __name__ == '__main__':
   load_dotenv()
+  parser = argparse.ArgumentParser()
+  parser.add_argument("url")
+  args = parser.parse_args()
   url = args.url
 
   if url.startswith("bit.ly"):
