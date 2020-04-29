@@ -5,9 +5,7 @@ import sys
 import argparse
 from dotenv import load_dotenv
 
-TOKEN = os.getenv("BITLY_TOKEN")
-
-def shorten_link(TOKEN, url):
+def shorten_link(token, url):
   if not url.startswith("https://"):
     if not url.startswith("http://"):
       url = f'https://{url}'
@@ -25,7 +23,7 @@ def shorten_link(TOKEN, url):
   bitlink = response.json()['id']
   return bitlink
 
-def count_clicks(TOKEN, bitlink):
+def count_clicks(token, bitlink):
   request_url = f'https://api-ssl.bitly.com/v4/bitlinks/{bitlink}/clicks/summary'
   auth_token = f'Bearer {TOKEN}'
   headers = {
@@ -42,6 +40,7 @@ def count_clicks(TOKEN, bitlink):
 
 if __name__ == '__main__':
   load_dotenv()
+  TOKEN = os.getenv("BITLY_TOKEN")
   parser = argparse.ArgumentParser()
   parser.add_argument("url")
   args = parser.parse_args()
@@ -49,7 +48,7 @@ if __name__ == '__main__':
 
   if url.startswith("bit.ly"):
     try:
-      print('Number of shortened url clicks: '+str(count_clicks(TOKEN, url)))
+      print(f'Number of shortened url clicks: {str(count_clicks(TOKEN, url))}')
     except requests.exceptions.HTTPError:
       print('Wrong bitlink')
   else:
