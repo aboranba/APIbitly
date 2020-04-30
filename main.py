@@ -11,9 +11,9 @@ def shorten_link(token, url):
       url = f'https://{url}'
 
   request_url = 'https://api-ssl.bitly.com/v4/bitlinks'
-  auth_token = f'Bearer {TOKEN}'
+  auth_header = f'Bearer {token}'
   headers = {
-    "Authorization": auth_token
+    "Authorization": auth_header
     }
   payload = {
     "long_url" : url
@@ -25,9 +25,9 @@ def shorten_link(token, url):
 
 def count_clicks(token, bitlink):
   request_url = f'https://api-ssl.bitly.com/v4/bitlinks/{bitlink}/clicks/summary'
-  auth_token = f'Bearer {TOKEN}'
+  auth_header = f'Bearer {token}'
   headers = {
-    "Authorization": auth_token
+    "Authorization": auth_header
     }
   payload = {
     "unit" : "day",
@@ -40,7 +40,7 @@ def count_clicks(token, bitlink):
 
 if __name__ == '__main__':
   load_dotenv()
-  TOKEN = os.getenv("BITLY_TOKEN")
+  token = os.getenv("BITLY_TOKEN")
   parser = argparse.ArgumentParser()
   parser.add_argument("url")
   args = parser.parse_args()
@@ -48,11 +48,11 @@ if __name__ == '__main__':
 
   if url.startswith("bit.ly"):
     try:
-      print(f'Number of shortened url clicks: {str(count_clicks(TOKEN, url))}')
+      print(f'Number of shortened url clicks: {str(count_clicks(token, url))}')
     except requests.exceptions.HTTPError:
       print('Wrong bitlink')
   else:
     try:
-      print(shorten_link(TOKEN, url))
+      print(shorten_link(token, url))
     except requests.exceptions.HTTPError:
       print('Wrong url')
